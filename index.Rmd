@@ -13,7 +13,9 @@ output:
 ---
 #Ephedra californica recovery
 ###Purpose
-To explore ephedra recovery following clipping. Year two in a long-term shrub removal experiment. Aboveground clipping. Panoche Hills Ecological Reserve. Removal done by A. Liczner, A. Filazzola, T. Noble, and M. Westphal. Loss of shrub effects on animals experiment separate from this survey initiated by A. Liczner and completed 2016.
+To explore ephedra recovery following clipping. Year two in a long-term shrub removal experiment. Aboveground clipping. Panoche Hills Ecological Reserve. 
+
+Removal done by A. Liczner, A. Filazzola, T. Noble, and M. Westphal. Loss of shrub effects on animals experiment separate from this survey initiated by A. Liczner and completed 2016. Eva Gruber surveyed for resprouting.
 
 ![](./EH.jpg)
 
