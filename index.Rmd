@@ -31,8 +31,10 @@ data <- data %>% mutate(volume = ((length + width)/2)^3*3.14*(1/3)) %>% arrange(
 
 ###EDA
 ```{r EDA, message=FALSE, warning=FALSE}
-p1 <- ggplot(data, aes(resprout)) + 
-  geom_histogram(binwidth = 1.5, fill = "dodgerblue")
+p1 <- ggplot(data, aes(resprout, weight= volume)) + 
+  geom_histogram(binwidth = 2, fill = "dodgerblue") +
+  xlab("number of shoots resprouted") +
+  ylab("relative weighted frequency by volume")
 ggplotly(p1)
 
 p2 <- ggplot(data, aes(volume, resprout)) + 
