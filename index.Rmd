@@ -44,6 +44,7 @@ p2 <- ggplot(data, aes(volume, resprout)) +
   geom_smooth(method = lm)
 ggplotly(p2)
 
+#Simple model
 m1 <- glm(resprout ~ volume, data = data)
 summary(m1)
 anova(m1, test = "Chisq")
