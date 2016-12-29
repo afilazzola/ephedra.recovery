@@ -40,8 +40,14 @@ p1 <- ggplot(data, aes(resprout, weight= volume)) +
   ylab("relative weighted frequency by volume")
 ggplotly(p1)
 
+#data <- data %>% filter(resprout < 15) #filter out my post hoc classifications
+
+#need more powerful test of pre-clipping volume
+
 p2 <- ggplot(data, aes(volume, resprout)) + 
   geom_point(color = "dodgerblue") + 
+  xlab("current shrub volume") +
+  ylab("number of resprouted shoots") +
   geom_smooth(method = lm)
 ggplotly(p2)
 
