@@ -40,6 +40,10 @@ p1 <- ggplot(data, aes(resprout, weight= volume)) +
   ylab("relative weighted frequency by volume")
 ggplotly(p1)
 
+p1.1 <- ggplot(data, aes(ID, resprout)) + 
+  geom_point(aes(size = volume), color = "dodgerblue") 
+ggplotly(p1.1)
+
 data <- data %>% filter(resprout < 15) #filter out my post hoc classifications
 
 #need more powerful test of pre-clipping volume
