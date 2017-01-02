@@ -33,22 +33,23 @@ data <- data %>% mutate(volume = ((length + width)/2)^3*3.14*(1/3)) %>% arrange(
 
 ###EDA
 ```{r EDA, message=FALSE, warning=FALSE}
+#current volume used####
 #data viz
-p1 <- ggplot(data, aes(resprout, weight= volume)) + 
+nov.2016 <- data %>% filter(date == "nov.2016") #only resurvey
+
+p1 <- ggplot(nov.2016, aes(resprout, weight= volume)) + 
   geom_histogram(binwidth = 2, fill = "dodgerblue") +
   xlab("number of shoots resprouted") +
   ylab("relative weighted frequency by volume")
 ggplotly(p1)
 
-p1.1 <- ggplot(data, aes(ID, resprout)) + 
+p1.1 <- ggplot(nov.2016, aes(ID, resprout)) + 
   geom_point(aes(size = volume), color = "dodgerblue") 
 ggplotly(p1.1)
 
-data <- data %>% filter(resprout < 15) #filter out my post hoc classifications
+nov.2016 <- nov.2016 %>% filter(resprout < 15) #filter out my post hoc classifications
 
-#need more powerful test of pre-clipping volume
-
-p2 <- ggplot(data, aes(volume, resprout)) + 
+p2 <- ggplot(nov.2016, aes(volume, resprout)) + 
   geom_point(color = "dodgerblue") + 
   xlab("current shrub volume") +
   ylab("number of resprouted shoots") +
@@ -56,8 +57,41 @@ p2 <- ggplot(data, aes(volume, resprout)) +
 ggplotly(p2)
 
 #simple model
-m1 <- glm(resprout ~ volume, data = data)
+m1 <- glm(resprout ~ volume, data = nov.2016)
 summary(m1)
 anova(m1, test = "Chisq")
+
+#setup volume####
+setup <- data %>% filter(date == "april.2013") %>% 
+  select(ID, volume) %>% rename(setup.vol = volume)
+
+merged.data <- left_join(nov.2016, setup)
+
+#repeat all above worflow code
+p3 <- ggplot(merged.data, aes(resprout, weight= setup.vol)) + 
+  geom_histogram(binwidth = 2, fill = "dodgerblue") +
+  xlab("number of shoots resprouted") +
+  ylab("relative weighted frequency by volume")
+ggplotly(p3)
+
+p3.1 <- ggplot(merged.data, aes(ID, resprout)) + 
+  geom_point(aes(size = setup.vol), color = "dodgerblue") 
+ggplotly(p3.1)
+
+merged.data <- merged.data %>% filter(resprout < 15) #filter out my post hoc classifications
+
+p4 <- ggplot(merged.data, aes(setup.vol, resprout)) + 
+  geom_point(color = "dodgerblue") + 
+  xlab("current shrub volume") +
+  ylab("number of resprouted shoots") +
+  geom_smooth(method = lm)
+ggplotly(p4)
+
+#simple model
+m2 <- glm(resprout ~ setup.vol, data = merged.data)
+summary(m2)
+anova(m2, test = "Chisq")
+
+
 
 ```
