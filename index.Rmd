@@ -40,7 +40,7 @@ nov.2016 <- data %>% filter(date == "nov.2016") #only resurvey
 p1 <- ggplot(nov.2016, aes(resprout, weight= volume)) + 
   geom_histogram(binwidth = 2, fill = "dodgerblue") +
   xlab("number of shoots resprouted") +
-  ylab("relative weighted frequency by volume")
+  ylab("relative weighted frequency by current volume")
 ggplotly(p1)
 
 p1.1 <- ggplot(nov.2016, aes(ID, resprout)) + 
@@ -71,7 +71,7 @@ merged.data <- left_join(nov.2016, setup)
 p3 <- ggplot(merged.data, aes(resprout, weight= setup.vol)) + 
   geom_histogram(binwidth = 2, fill = "dodgerblue") +
   xlab("number of shoots resprouted") +
-  ylab("relative weighted frequency by volume")
+  ylab("relative weighted frequency by setup volume")
 ggplotly(p3)
 
 p3.1 <- ggplot(merged.data, aes(ID, resprout)) + 
@@ -82,7 +82,7 @@ merged.data <- merged.data %>% filter(resprout < 15) #filter out my post hoc cla
 
 p4 <- ggplot(merged.data, aes(setup.vol, resprout)) + 
   geom_point(color = "dodgerblue") + 
-  xlab("current shrub volume") +
+  xlab("setup shrub volume") +
   ylab("number of resprouted shoots") +
   geom_smooth(method = lm)
 ggplotly(p4)
