@@ -92,6 +92,16 @@ m2 <- glm(resprout ~ setup.vol, data = merged.data)
 summary(m2)
 anova(m2, test = "Chisq")
 
+#Proportion regrowth by initial shrub size
+merged.data <-merged.data %>% mutate(relative.regrowth = resprout/setup.vol) #calculate proportion reprouting by initial size
 
+p5 <- ggplot(merged.data, aes(volume, relative.regrowth)) + geom_point(color = "dodgerblue") + xlab("current shrub volume") + 
+  geom_smooth(method = lm) +
+  ylab("regrowth weighted by initial shrub size") +
+  scale_y_continuous(breaks=c(-2,-1,0,1,2))
+ggplotly(p5)
+
+m3 <- lm(merged.data$relative.regrowth ~ merged.data$volume)
+summary(m3) # slope is not significantly different from 0 so no difference in proportionate regrowth
 
 ```
