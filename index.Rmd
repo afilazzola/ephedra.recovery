@@ -13,7 +13,7 @@ output:
 ---
 #Ephedra californica recovery
 ###Purpose
-To explore ephedra recovery following clipping. Year two in a long-term shrub removal experiment. Aboveground clipping. Panoche Hills Ecological Reserve. 
+To explore *Ephedra californica* recovery following clipping. Year two in a long-term shrub removal experiment. Aboveground clipping. Panoche Hills Ecological Reserve. 
 
 Removal done by A. Liczner, A. Filazzola, T. Noble, and M. Westphal. Loss of shrub effects on animals experiment separate from this survey initiated by A. Liczner and completed 2016. Eva Gruber surveyed for resprouting.
 
@@ -163,3 +163,15 @@ summary(m3.1) # slope is not significantly different from 0 so no difference in 
 anova(m3.1, test = "Chisq")
 
 ```
+
+###Summary findings
+1. Counting resprouted shoots is an effective and relatively accurate mechanism to estimate regrowth in *Ephedra californica* following damage.  Trends in regrowth similar between shoot number and total wet weight and shoot number significantly and effectively predicts the mass of biomass regrowth per shrub.
+
+
+2. Larger shrubs have more resprouted shoots and regrowth of biomass, however, the regrowth is not proportionately greater for increasingly larger shrubs. THIS is an important finding.  Larger shrubs do NOT have a capacity to proportionally recover from damage relative to smaller shrubs.
+
+3. *Ephedra californica* can recover to some extent following damage.  However, we do not know how these recovery patterns compare to the background growth patterns of undamaged shrubs nor whether subsequent or repeated damages to this species reduces its potential capacity to recover.
+
+<b> Future directions. </b>
+1. Remeasure recovered in 1 and 2 years to this new clipping event.
+2. Develop a means to estimate growth rate in undamaged shrubs for the next 1-2years.  
