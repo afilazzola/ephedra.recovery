@@ -75,14 +75,18 @@ p4 <- ggplot(nov.2016, aes(resprout, total.weight)) +
   geom_smooth(method = lm)
 ggplotly(p4)
 
-#simple model
+#quick test
+fit <- lm(total.weight ~ resprout, data= nov.2016)
+summary(fit)
+
+#simple main model
 m1 <- glm(resprout ~ volume, data = nov.2016)
 summary(m1)
 anova(m1, test = "Chisq")
 
 m1.1 <- glm(total.weight ~ volume, data = nov.2016)
 summary(m1.1)
-anova(m1, test = "Chisq")
+anova(m1.1, test = "Chisq")
 
 #setup volume####
 setup <- data %>% filter(date == "april.2013") %>% 
@@ -152,8 +156,10 @@ ggplotly(p5.1)
 
 m3 <- lm(merged.data$relative.regrowth ~ merged.data$volume)
 summary(m3) # slope is not significantly different from 0 so no difference in proportionate regrowth
+anova(m3, test = "Chisq")
 
 m3.1 <- lm(merged.data$relative.biomass.regrowth ~ merged.data$volume)
 summary(m3.1) # slope is not significantly different from 0 so no difference in proportionate regrowth
+anova(m3.1, test = "Chisq")
 
 ```
