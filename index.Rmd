@@ -31,10 +31,11 @@ data <- data %>% mutate(volume = ((length + width)/2)^3*3.14*(1/3)) %>% arrange(
 
 wet.weights <-read.csv("data/wet.weights.csv")
 total.weight <- wet.weights %>% select(ID, total.weight)
+stems <- read_csv("data/stem.analyses.csv")
 
 ```
 
-###EDA
+###EDA field data & wet weight
 ```{r EDA, message=FALSE, warning=FALSE}
 #current volume used####
 #data viz
@@ -67,7 +68,7 @@ p3 <- ggplot(nov.2016, aes(volume, total.weight)) +
   geom_smooth(method = lm)
 ggplotly(p3)
 
-#Detour, does number of resprouted shoots predict wet weight
+#number of resprouted shoots predict wet weight
 p4 <- ggplot(nov.2016, aes(resprout, total.weight)) + 
   geom_point(color = "dodgerblue") + 
   xlab("resprouted shoot numbers") +
@@ -164,6 +165,74 @@ anova(m3.1, test = "Chisq")
 
 ```
 
+###EDA stems & dry weight
+```{r stem analyses and dry weight, message=FALSE, warning=FALSE}
+merged.data <- left_join(merged.data, stems, by = "ID")
+#Mass EDA####
+#Did wet predict dry weights?
+p <- ggplot(merged.data, aes(total.weight, total.dry.weight.g)) + 
+  geom_point(color = "dodgerblue") + 
+  xlab("total wet weight") +
+  ylab("total dry weight") +
+  geom_smooth(method = lm)
+ggplotly(p)
+
+fit <- lm(total.dry.weight.g ~ total.weight, data= merged.data)
+summary(fit)
+
+#Volume by dry weight
+p <- ggplot(merged.data, aes(volume, total.dry.weight.g)) + 
+  geom_point(color = "dodgerblue") + 
+  xlab("current shrub volume") +
+  ylab("total dry weight") +
+  geom_smooth(method = lm)
+ggplotly(p)
+
+fit <- lm(total.dry.weight.g ~ volume, data= merged.data)
+summary(fit)
+
+#number of resprouted shoots predict dry weight
+p4 <- ggplot(merged.data, aes(resprout, total.dry.weight.g)) + 
+  geom_point(color = "dodgerblue") + 
+  xlab("resprouted shoot numbers") +
+  ylab("total dry weight") +
+  geom_smooth(method = lm)
+ggplotly(p4)
+
+fit <- lm(total.dry.weight.g ~ resprout, data= merged.data)
+summary(fit)
+
+merged.data <-merged.data %>% mutate(relative.dry.biomass.regrowth = total.weight/setup.vol) #calculate proportion reprouting by initial size
+library(outliers)
+chisq.out.test(merged.data$relative.dry.biomass.regrowth)
+merged.data <- merged.data %>% filter(relative.dry.biomass.regrowth < 1224)
+
+p <- ggplot(merged.data, aes(volume, relative.dry.biomass.regrowth)) + geom_point(color = "dodgerblue") + xlab("current shrub volume") + 
+  geom_smooth(method = lm) +
+  ylab("dry biomass regrowth by initial shrub size") +
+  scale_y_continuous(breaks=c(-2,-1,0,1,2))
+ggplotly(p)
+
+m <- lm(merged.data$relative.dry.biomass.regrowth ~ merged.data$volume)
+summary(m) # slope is not significantly different from 0 so no difference in proportionate regrowth
+anova(m, test = "Chisq")
+
+#Morphometrics analyses####
+p <- ggplot(merged.data, aes(total.singletons, total.complex.green.shoots)) + geom_point(color = "dodgerblue") +
+  geom_smooth(method = lm)
+  ggplotly(p)
+  
+  p <- ggplot(merged.data, aes(resprout, total.singletons)) + 
+    geom_point(color = "dodgerblue") +
+    geom_smooth(method = lm)
+  ggplotly(p)
+  
+    p <- ggplot(merged.data, aes(volume, total.singletons)) + 
+    geom_point(color = "dodgerblue") +
+    geom_smooth(method = lm)
+  ggplotly(p)
+```
+
 ###Summary
 <b> Primary trends. </b>  
 
@@ -173,6 +242,8 @@ anova(m3.1, test = "Chisq")
 2. Larger shrubs have more resprouted shoots and regrowth of biomass; however, the regrowth is not proportionately greater for increasingly larger shrubs. THIS is an important finding.  Larger shrubs do NOT have a greater capacity to proportionally recover from damage relative to smaller shrubs.
 
 3. *Ephedra californica* can recover to some extent following damage.  However, we do not know how these recovery patterns compare to the background growth patterns of undamaged shrubs nor whether subsequent or repeated damages to this species reduces its potential capacity to recover.
+
+4. Methodologically, wet weight is an effective measure of biomass produced (i.e. predicts dry weight effectively with little variation).
 
 
 
