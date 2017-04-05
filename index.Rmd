@@ -25,6 +25,7 @@ Removal done by A. Liczner, A. Filazzola, T. Noble, and M. Westphal. Loss of shr
 ```{r library & data, message=FALSE, warning=FALSE}
 library(tidyverse)
 library(plotly)
+
 data <- read_csv("data/EH.recovery.2016.csv")
 data
 data <- data %>% mutate(volume = ((length + width)/2)^3*3.14*(1/3)) %>% arrange(desc(resprout))
@@ -231,6 +232,27 @@ p <- ggplot(merged.data, aes(total.singletons, total.complex.green.shoots)) + ge
     geom_point(color = "dodgerblue") +
     geom_smooth(method = lm)
   ggplotly(p)
+```
+
+###Ephedra foundation effects
+```{r foundation, message=FALSE, warning=FALSE}
+#Data
+foundation <- read_csv("data/ephedra.foundation.csv")
+foundation <- foundation %>% mutate(volume = ((length + width)/2)^3*3.14*(1/3))
+foundation$year <- as.character(foundation$year)
+foundation
+
+foundation.rii <- read_csv("data/ephedra.foundation.rii.csv")
+foundation.rii <- foundation.rii %>% mutate(volume = ((length + width)/2)^3*3.14*(1/3))
+foundation.rii$year <- as.character(foundation.rii$year)
+foundation.rii
+
+#Viz
+ggplot(foundation, aes(microsite, abundance)) + geom_boxplot() + facet_grid(~year)
+ggplot(foundation, aes(microsite, richness)) + geom_boxplot() + facet_grid(~year)
+
+
+
 ```
 
 ###Summary
