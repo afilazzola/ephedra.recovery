@@ -54,8 +54,8 @@ rii.2016 <- foundation.rii %>% filter(year == "2016")
 
 #Rii
 #differences from open
-ggplot(foundation.rii, aes(year, abundance)) + geom_boxplot(notch = TRUE, varwidth = TRUE)
-ggplot(foundation.rii, aes(year,richness)) + geom_boxplot(notch = TRUE,varwidth = TRUE)
+ggplot(foundation.rii, aes(year, abundance)) + geom_boxplot(fill = "darkseagreen2")
+ggplot(foundation.rii, aes(year,richness)) + geom_boxplot(fill = "darkseagreen2")
 
 #models for different between years
 require(lmerTest)
