@@ -13,7 +13,7 @@ output:
 ---
 #Ephedra californica recovery
 ###Purpose
-To explore *Ephedra californica* recovery following clipping. Year two in a long-term shrub removal experiment. Aboveground clipping. Panoche Hills Ecological Reserve. 
+To explore *Ephedra californica* recovery following clipping. Year two in a long-term shrub removal experiment. Aboveground clipping. Panoche Hills Ecological Reserve. The manipulative research was done at site 1.1, the plateau within this reserve.
 
 Removal done by A. Liczner, A. Filazzola, T. Noble, and M. Westphal. Loss of shrub effects on animals experiment separate from this survey initiated by A. Liczner and completed 2016. Eva Gruber surveyed for resprouting.
 
@@ -23,7 +23,6 @@ Removal done by A. Liczner, A. Filazzola, T. Noble, and M. Westphal. Loss of shr
 
 ```{r loads, warning=FALSE, message=FALSE, echo=FALSE}
 library(tidyverse)
-library(plotly)
 
 ```
 
@@ -162,39 +161,37 @@ stems <- read_csv("data/stem.analyses.csv")
 nov.2016 <- data %>% filter(date == "nov.2016") #only resurvey
 nov.2016 <- left_join(nov.2016, total.weight, by = "ID")
 
-p1 <- ggplot(nov.2016, aes(resprout, weight= volume)) + 
+ggplot(nov.2016, aes(resprout, weight= volume)) + 
   geom_histogram(binwidth = 2, fill = "dodgerblue") +
   xlab("number of shoots resprouted") +
   ylab("relative weighted frequency by current volume")
-ggplotly(p1)
 
-p1.1 <- ggplot(nov.2016, aes(ID, resprout)) + 
+ggplot(nov.2016, aes(ID, resprout)) + 
   geom_point(aes(size = volume), color = "dodgerblue") 
-ggplotly(p1.1)
 
 nov.2016 <- nov.2016 %>% filter(resprout < 15) #filter out my post hoc classifications
 
-p2 <- ggplot(nov.2016, aes(volume, resprout)) + 
+ggplot(nov.2016, aes(volume, resprout)) + 
   geom_point(color = "dodgerblue") + 
   xlab("current shrub volume") +
   ylab("number of resprouted shoots") +
   geom_smooth(method = lm)
-ggplotly(p2)
 
-p3 <- ggplot(nov.2016, aes(volume, total.weight)) + 
+
+ggplot(nov.2016, aes(volume, total.weight)) + 
   geom_point(color = "dodgerblue") + 
   xlab("current shrub volume") +
   ylab("total wet weight") +
   geom_smooth(method = lm)
-ggplotly(p3)
+
 
 #number of resprouted shoots predict wet weight
-p4 <- ggplot(nov.2016, aes(resprout, total.weight)) + 
+ggplot(nov.2016, aes(resprout, total.weight)) + 
   geom_point(color = "dodgerblue") + 
   xlab("resprouted shoot numbers") +
   ylab("total wet weight") +
   geom_smooth(method = lm)
-ggplotly(p4)
+
 
 #quick test
 fit <- lm(total.weight ~ resprout, data= nov.2016)
@@ -216,38 +213,34 @@ setup <- data %>% filter(date == "april.2013") %>%
 merged.data <- left_join(nov.2016, setup)
 
 #repeat all above worflow code
-p3 <- ggplot(merged.data, aes(resprout, weight= setup.vol)) + 
+ggplot(merged.data, aes(resprout, weight= setup.vol)) + 
   geom_histogram(binwidth = 2, fill = "dodgerblue") +
   xlab("number of shoots resprouted") +
   ylab("relative weighted frequency by setup volume")
-ggplotly(p3)
 
-p3.1 <- ggplot(merged.data, aes(total.weight, weight= setup.vol)) + 
+ggplot(merged.data, aes(total.weight, weight= setup.vol)) + 
   geom_histogram(binwidth = 1000, fill = "dodgerblue") +
   xlab("total wet weight regrowth") +
   ylab("relative weighted frequency by setup volume")
-ggplotly(p3.1)
 
-
-p3.2 <- ggplot(merged.data, aes(ID, resprout)) + 
+ggplot(merged.data, aes(ID, resprout)) + 
   geom_point(aes(size = setup.vol), color = "dodgerblue") 
-ggplotly(p3.2)
+
 
 merged.data <- merged.data %>% filter(resprout < 15) #filter out my post hoc classifications
 
-p4 <- ggplot(merged.data, aes(setup.vol, resprout)) + 
+ggplot(merged.data, aes(setup.vol, resprout)) + 
   geom_point(color = "dodgerblue") + 
   xlab("setup shrub volume") +
   ylab("number of resprouted shoots") +
   geom_smooth(method = lm)
-ggplotly(p4)
 
-p4.1 <- ggplot(merged.data, aes(setup.vol, total.weight)) + 
+ggplot(merged.data, aes(setup.vol, total.weight)) + 
   geom_point(color = "dodgerblue") + 
   xlab("setup shrub volume") +
   ylab("total wet weight regrowth") +
   geom_smooth(method = lm)
-ggplotly(p4.1)
+
 
 #simple model
 m2 <- glm(resprout ~ setup.vol, data = merged.data)
@@ -263,17 +256,16 @@ merged.data <-merged.data %>% mutate(relative.regrowth = resprout/setup.vol) #ca
 
 merged.data <-merged.data %>% mutate(relative.biomass.regrowth = total.weight/setup.vol) #calculate proportion reprouting by initial size
 
-p5 <- ggplot(merged.data, aes(volume, relative.regrowth)) + geom_point(color = "dodgerblue") + xlab("current shrub volume") + 
+ggplot(merged.data, aes(volume, relative.regrowth)) + geom_point(color = "dodgerblue") + xlab("current shrub volume") + 
   geom_smooth(method = lm) +
   ylab("regrowth weighted by initial shrub size") +
   scale_y_continuous(breaks=c(-2,-1,0,1,2))
-ggplotly(p5)
 
-p5.1 <- ggplot(merged.data, aes(volume, relative.biomass.regrowth)) + geom_point(color = "dodgerblue") + xlab("current shrub volume") + 
+ggplot(merged.data, aes(volume, relative.biomass.regrowth)) + geom_point(color = "dodgerblue") + xlab("current shrub volume") + 
   geom_smooth(method = lm) +
   ylab("biomass regrowth weighted by initial shrub size") +
   scale_y_continuous(breaks=c(-2,-1,0,1,2))
-ggplotly(p5.1)
+
 
 m3 <- lm(merged.data$relative.regrowth ~ merged.data$volume)
 summary(m3) # slope is not significantly different from 0 so no difference in proportionate regrowth
@@ -290,34 +282,34 @@ anova(m3.1, test = "Chisq")
 merged.data <- left_join(merged.data, stems, by = "ID")
 #Mass EDA####
 #Did wet predict dry weights?
-p <- ggplot(merged.data, aes(total.weight, total.dry.weight.g)) + 
+ggplot(merged.data, aes(total.weight, total.dry.weight.g)) + 
   geom_point(color = "dodgerblue") + 
   xlab("total wet weight") +
   ylab("total dry weight") +
   geom_smooth(method = lm)
-ggplotly(p)
+
 
 fit <- lm(total.dry.weight.g ~ total.weight, data= merged.data)
 summary(fit)
 
 #Volume by dry weight
-p <- ggplot(merged.data, aes(volume, total.dry.weight.g)) + 
+ggplot(merged.data, aes(volume, total.dry.weight.g)) + 
   geom_point(color = "dodgerblue") + 
   xlab("current shrub volume") +
   ylab("total dry weight") +
   geom_smooth(method = lm)
-ggplotly(p)
+
 
 fit <- lm(total.dry.weight.g ~ volume, data= merged.data)
 summary(fit)
 
 #number of resprouted shoots predict dry weight
-p4 <- ggplot(merged.data, aes(resprout, total.dry.weight.g)) + 
+ggplot(merged.data, aes(resprout, total.dry.weight.g)) + 
   geom_point(color = "dodgerblue") + 
   xlab("resprouted shoot numbers") +
   ylab("total dry weight") +
   geom_smooth(method = lm)
-ggplotly(p4)
+
 
 fit <- lm(total.dry.weight.g ~ resprout, data= merged.data)
 summary(fit)
@@ -327,30 +319,30 @@ library(outliers)
 chisq.out.test(merged.data$relative.dry.biomass.regrowth)
 merged.data <- merged.data %>% filter(relative.dry.biomass.regrowth < 1224)
 
-p <- ggplot(merged.data, aes(volume, relative.dry.biomass.regrowth)) + geom_point(color = "dodgerblue") + xlab("current shrub volume") + 
+ggplot(merged.data, aes(volume, relative.dry.biomass.regrowth)) + geom_point(color = "dodgerblue") + xlab("current shrub volume") + 
   geom_smooth(method = lm) +
   ylab("dry biomass regrowth by initial shrub size") +
   scale_y_continuous(breaks=c(-2,-1,0,1,2))
-ggplotly(p)
+
 
 m <- lm(merged.data$relative.dry.biomass.regrowth ~ merged.data$volume)
 summary(m) # slope is not significantly different from 0 so no difference in proportionate regrowth
 anova(m, test = "Chisq")
 
 #Morphometrics analyses####
-p <- ggplot(merged.data, aes(total.singletons, total.complex.green.shoots)) + geom_point(color = "dodgerblue") +
+ggplot(merged.data, aes(total.singletons, total.complex.green.shoots)) + geom_point(color = "dodgerblue") +
   geom_smooth(method = lm)
-  ggplotly(p)
+
   
-  p <- ggplot(merged.data, aes(resprout, total.singletons)) + 
+ggplot(merged.data, aes(resprout, total.singletons)) + 
     geom_point(color = "dodgerblue") +
     geom_smooth(method = lm)
-  ggplotly(p)
+
   
-    p <- ggplot(merged.data, aes(volume, total.singletons)) + 
+ggplot(merged.data, aes(volume, total.singletons)) + 
     geom_point(color = "dodgerblue") +
     geom_smooth(method = lm)
-  ggplotly(p)
+
   
 ```
 
