@@ -108,13 +108,13 @@ t2
 
 #volume
 
-ggplot(foundation.rii, aes(volume, abundance)) + geom_point(aes(color = year)) + geom_smooth(method = "lm")
+ggplot(foundation.rii, aes(volume, abundance)) + geom_point(aes(color = year)) + geom_smooth(method = "lm") + xlab("volume (m^3)")
 
-ggplot(foundation.rii, aes(volume, abundance, color = year)) + geom_point() + geom_smooth(method = "lm", se = FALSE)
+ggplot(foundation.rii, aes(volume, abundance, color = year)) + geom_point() + geom_smooth(method = "lm", se = FALSE) + xlab("volume (m^3)")
 
-ggplot(foundation.rii, aes(volume, richness)) + geom_point(aes(color=year)) + geom_smooth(method = "lm")
+ggplot(foundation.rii, aes(volume, richness)) + geom_point(aes(color=year)) + geom_smooth(method = "lm") + xlab("volume (m^3)")
 
-ggplot(foundation.rii, aes(volume, richness, color = year)) + geom_point() + geom_smooth(method = "lm", se = FALSE)
+ggplot(foundation.rii, aes(volume, richness, color = year)) + geom_point() + geom_smooth(method = "lm", se = FALSE) + xlab("volume (m^3)")
 
 #posthoc tests from main models
 m <- lm(abundance~volume, data = foundation.rii)
