@@ -59,12 +59,16 @@ ggplot(foundation.rii, aes(year,richness)) + geom_boxplot(fill = "darkseagreen3"
 #models for different between years
 require(lmerTest)
 m <- lmer(abundance~(1|year) + volume, data = foundation.rii)
-summary(m) 
-#anova(m, test = "Chisq")
+#summary(m)
+anova(m, test = "Chisq")
+rand(m) #to get p-values for random effects
+
 
 m <- lmer(richness~(1|year) + volume, data = foundation.rii)
-summary(m) 
-#anova(m, test = "Chisq")
+#summary(m) 
+anova(m, test = "Chisq")
+rand(m)
+
 
 #different from zero
 #ab
