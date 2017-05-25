@@ -197,8 +197,7 @@ ggplot(nov.2016, aes(total.weight, weight= volume)) +
   ylab("relative weighted frequency by current volume") +
   xlim(0,5000)
 
-
-
+summary(nov.2016)
 
 ```
 
