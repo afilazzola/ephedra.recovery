@@ -161,32 +161,31 @@ stems <- read_csv("data/stem.analyses.csv")
 ###EDA field data & wet weight
 ```{r EDA, message=FALSE, warning=FALSE}
 #current volume used####
-#data viz
 nov.2016 <- data %>% filter(date == "nov.2016") #only resurvey
 nov.2016 <- left_join(nov.2016, total.weight, by = "ID")
+#nov.2016 <- nov.2016 %>% filter(resprout < 15) #filter out my post hoc classifications
 
+#Viz
 ggplot(nov.2016, aes(resprout, weight= volume)) + 
-  geom_histogram(binwidth = 2, fill = "dodgerblue") +
+  geom_histogram(binwidth = 2, fill = "darkseagreen3") +
   xlab("number of shoots resprouted") +
-  ylab("relative weighted frequency by current volume")
+  ylab("relative weighted frequency by current volume") +
+  xlim(0,15)
 
-ggplot(nov.2016, aes(ID, resprout)) + 
-  geom_point(aes(size = volume), color = "dodgerblue") 
-
-nov.2016 <- nov.2016 %>% filter(resprout < 15) #filter out my post hoc classifications
+summary(nov.2016)
 
 ggplot(nov.2016, aes(volume, resprout)) + 
-  geom_point(color = "dodgerblue") + 
+  geom_point(color = "darkseagreen3") + 
   xlab("current shrub volume") +
   ylab("number of resprouted shoots") +
-  geom_smooth(method = lm)
+  geom_smooth(method = lm, color = "darkseagreen3")
 
 
 ggplot(nov.2016, aes(volume, total.weight)) + 
-  geom_point(color = "dodgerblue") + 
+  geom_point(color = "darkseagreen3") + 
   xlab("current shrub volume") +
-  ylab("total wet weight") +
-  geom_smooth(method = lm)
+  ylab("total wet weight (g)") +
+  geom_smooth(method = lm, color ="darkseagreen3")
 
 
 #number of resprouted shoots predict wet weight
