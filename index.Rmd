@@ -180,7 +180,11 @@ ggplot(nov.2016, aes(resprout, weight= volume)) +
   xlab("number of shoots resprouted") +
   ylab("relative weighted frequency by current volume") +
   xlim(0,15)
-  
+
+ggplot(nov.2016, aes(height, weight= volume)) +
+  geom_density(kernel = "gaussian", fill = "darkseagreen3") +
+  xlab("height (m)") +
+  ylab("relative weighted frequency by current volume")   
 
 #ggplot(nov.2016, aes(total.weight, weight= volume)) + 
   #geom_histogram(binwidth = 700, fill = "darkseagreen3") +
@@ -192,6 +196,8 @@ ggplot(nov.2016, aes(total.weight, weight= volume)) +
   xlab("total biomass (g)") +
   ylab("relative weighted frequency by current volume") +
   xlim(0,5000)
+
+
 
 
 ```
