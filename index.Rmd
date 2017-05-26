@@ -139,7 +139,6 @@ summary(m)
 #ggplot(foundation, aes(volume, abundance, color = year)) + geom_point() + geom_smooth(method = "lm")
 #ggplot(foundation, aes(volume, richness, color = year)) + geom_point() + geom_smooth(method = "lm")
 
-
 ```
 
 ###Recovery data wrangling
@@ -161,7 +160,9 @@ nov.2016 <- left_join(nov.2016, total.weight, by = "ID")
 #setup volume####
 setup <- data %>% filter(date == "april.2013") %>% 
   select(ID, volume) %>% rename(setup.vol = volume)
+
 merged.data <- left_join(nov.2016, setup)
+merged.data <- left_join(merged.data, stems, by = "ID")
 
 ```
 
@@ -203,173 +204,121 @@ summary(nov.2016)
 
 ###Shrub volume inference
 ```{r volume, warning=FALSE, message=FALSE}
-ggplot(nov.2016, aes(volume, resprout)) + 
-  geom_point(color = "darkseagreen3") + 
-  xlab("current shrub volume") +
-  ylab("number of resprouted shoots") +
-  geom_smooth(method = lm, color = "darkseagreen3")
+#Size-dependent recoveries####
+#Primary data
+ggplot(merged.data, aes(setup.vol, resprout)) +
+  geom_point(color = "darkseagreen3") +
+  geom_smooth(method = "lm", color = "darkseagreen3") +
+  xlab("initial shrub volume (m^3)") +
+  ylab("number of shoots resprouted")
 
-ggplot(nov.2016, aes(volume, total.weight)) + 
-  geom_point(color = "darkseagreen3") + 
-  xlab("current shrub volume") +
-  ylab("total wet weight (g)") +
-  geom_smooth(method = lm, color ="darkseagreen3")
+ggplot(merged.data, aes(setup.vol, total.weight)) +
+  geom_point(color = "darkseagreen3") +
+  geom_smooth(method = "lm", color = "darkseagreen3") +
+  xlab("initial shrub volume (m^3)") +
+  ylab("total biomass (g)")
 
-
-#number of resprouted shoots predict wet weight
-ggplot(nov.2016, aes(resprout, total.weight)) + 
-  geom_point(color = "dodgerblue") + 
-  xlab("resprouted shoot numbers") +
-  ylab("total wet weight") +
-  geom_smooth(method = lm)
-
-#quick test
-fit <- lm(total.weight ~ resprout, data= nov.2016)
+#simple models
+fit <-lm(resprout ~ setup.vol, data = merged.data)
 summary(fit)
 
-#simple main model
-m1 <- glm(resprout ~ volume, data = nov.2016)
-summary(m1)
-anova(m1, test = "Chisq")
+m <- glm(resprout ~ setup.vol, data = merged.data)
+summary(m)
+anova(m, test = "Chisq")
 
-m1.1 <- glm(total.weight ~ volume, data = nov.2016)
-summary(m1.1)
-anova(m1.1, test = "Chisq")
+fit <-lm(total.weight ~ setup.vol, data = merged.data)
+summary(fit)
 
+m <- glm(total.weight ~ setup.vol, data = merged.data)
+summary(m)
+anova(m, test = "Chisq")
 
-
-#repeat all above worflow code
-ggplot(merged.data, aes(resprout, weight= setup.vol)) + 
-  geom_histogram(binwidth = 2, fill = "darkseagreen3") +
-  xlab("number of shoots resprouted") +
-  ylab("relative weighted frequency by setup volume")
-
-ggplot(merged.data, aes(total.weight, weight= setup.vol)) + 
-  geom_histogram(binwidth = 1000, fill = "darkseagreen3") +
-  xlab("total wet weight regrowth") +
-  ylab("relative weighted frequency by setup volume")
-
-ggplot(merged.data, aes(ID, resprout)) + 
-  geom_point(aes(size = setup.vol), color = "darkseagreen3") 
-
-
-merged.data <- merged.data %>% filter(resprout < 15) #filter out my post hoc classifications
-
-ggplot(merged.data, aes(setup.vol, resprout)) + 
-  geom_point(color = "dodgerblue") + 
-  xlab("setup shrub volume") +
-  ylab("number of resprouted shoots") +
-  geom_smooth(method = lm)
-
-ggplot(merged.data, aes(setup.vol, total.weight)) + 
-  geom_point(color = "dodgerblue") + 
-  xlab("setup shrub volume") +
-  ylab("total wet weight regrowth") +
-  geom_smooth(method = lm)
-
-
-#simple model
-m2 <- glm(resprout ~ setup.vol, data = merged.data)
-summary(m2)
-anova(m2, test = "Chisq")
-
-m2.1 <- glm(total.weight ~ setup.vol, data = merged.data)
-summary(m2)
-anova(m2.1, test = "Chisq")
 
 #Proportion regrowth by initial shrub size
-merged.data <-merged.data %>% mutate(relative.regrowth = resprout/setup.vol) #calculate proportion reprouting by initial size
+#calculate proportion reprouting by initial size
+#merged.data <-merged.data %>% mutate(relative.regrowth = resprout/setup.vol) 
+#merged.data <-merged.data %>% mutate(relative.biomass.regrowth = total.weight/setup.vol) #calculate proportion reprouting by initial size
 
-merged.data <-merged.data %>% mutate(relative.biomass.regrowth = total.weight/setup.vol) #calculate proportion reprouting by initial size
+#ggplot(merged.data, aes(volume, relative.regrowth)) + geom_point(color = "darkseagreen3") + xlab("current shrub volume") + 
+  #geom_smooth(method = lm, color = "darkseagreen3") +
+  #ylab("regrowth weighted by initial shrub size") +
+  #scale_y_continuous(breaks=c(-2,-1,0,1,2))
 
-ggplot(merged.data, aes(volume, relative.regrowth)) + geom_point(color = "dodgerblue") + xlab("current shrub volume") + 
-  geom_smooth(method = lm) +
-  ylab("regrowth weighted by initial shrub size") +
-  scale_y_continuous(breaks=c(-2,-1,0,1,2))
-
-ggplot(merged.data, aes(volume, relative.biomass.regrowth)) + geom_point(color = "darkseagreen3") + xlab("current shrub volume") + 
-  geom_smooth(method = lm) +
-  ylab("biomass regrowth weighted by initial shrub size") +
-  scale_y_continuous(breaks=c(-2,-1,0,1,2))
+#ggplot(merged.data, aes(volume, relative.biomass.regrowth)) + geom_point(color = "darkseagreen3") + xlab("current shrub volume") + 
+  #geom_smooth(method = lm, color = "darkseagreen3") +
+  #ylab("biomass regrowth weighted by initial shrub size") +
+  #scale_y_continuous(breaks=c(-2,-1,0,1,2))
 
 
-m3 <- lm(merged.data$relative.regrowth ~ merged.data$volume)
-summary(m3) # slope is not significantly different from 0 so no difference in proportionate regrowth
-anova(m3, test = "Chisq")
+#m3 <- lm(merged.data$relative.regrowth ~ merged.data$volume)
+#summary(m3) # slope is not significantly different from 0 so no difference in proportionate regrowth
+#anova(m3, test = "Chisq")
 
-m3.1 <- lm(merged.data$relative.biomass.regrowth ~ merged.data$volume)
-summary(m3.1) # slope is not significantly different from 0 so no difference in proportionate regrowth
-anova(m3.1, test = "Chisq")
+#m3.1 <- lm(merged.data$relative.biomass.regrowth ~ merged.data$volume)
+#summary(m3.1) # slope is not significantly different from 0 so no difference in proportionate regrowth
+#anova(m3.1, test = "Chisq")
 
 ```
 
 ###Biomass prediction
 ```{r stem analyses and dry weight, message=FALSE, warning=FALSE}
-merged.data <- left_join(merged.data, stems, by = "ID")
-#Mass EDA####
-#Did wet predict dry weights?
-ggplot(merged.data, aes(total.weight, total.dry.weight.g)) + 
-  geom_point(color = "dodgerblue") + 
-  xlab("total wet weight") +
-  ylab("total dry weight") +
-  geom_smooth(method = lm)
 
+#number of resprouted shoots predict wet weight
+ggplot(nov.2016, aes(resprout, total.weight)) + 
+  geom_point(color = "seagreen3") + 
+  xlab("resprouted shoot numbers") +
+  ylab("total biomass (g)") +
+  geom_smooth(method = lm, color = "seagreen3")
+
+#quick test
+fit <- lm(total.weight ~ resprout, data= nov.2016)
+summary(fit)
+
+ggplot(nov.2016, aes(volume, total.weight)) + 
+  geom_point(color = "seagreen3") + 
+  xlab("shrub volumes (m^3)") +
+  ylab("total biomass (g)") +
+  geom_smooth(method = lm, color = "seagreen3")
+
+#quick test
+fit <- lm(total.weight ~ volume, data= nov.2016)
+summary(fit)
+
+#Wet biomass predictor for dry weights
+ggplot(merged.data, aes(total.weight, total.dry.weight.g)) + 
+  geom_point(color = "seagreen3") + 
+  xlab("total wet biomass (g)") +
+  ylab("total dry weight (g)") +
+  geom_smooth(method = "lm", color = "seagreen3")
 
 fit <- lm(total.dry.weight.g ~ total.weight, data= merged.data)
 summary(fit)
 
-#Volume by dry weight
-ggplot(merged.data, aes(volume, total.dry.weight.g)) + 
-  geom_point(color = "dodgerblue") + 
-  xlab("current shrub volume") +
-  ylab("total dry weight") +
-  geom_smooth(method = lm)
-
-
-fit <- lm(total.dry.weight.g ~ volume, data= merged.data)
-summary(fit)
-
-#number of resprouted shoots predict dry weight
-ggplot(merged.data, aes(resprout, total.dry.weight.g)) + 
-  geom_point(color = "dodgerblue") + 
-  xlab("resprouted shoot numbers") +
-  ylab("total dry weight") +
-  geom_smooth(method = lm)
-
-
-fit <- lm(total.dry.weight.g ~ resprout, data= merged.data)
-summary(fit)
-
-merged.data <-merged.data %>% mutate(relative.dry.biomass.regrowth = total.weight/setup.vol) #calculate proportion reprouting by initial size
 library(outliers)
-chisq.out.test(merged.data$relative.dry.biomass.regrowth)
-merged.data <- merged.data %>% filter(relative.dry.biomass.regrowth < 1224)
+chisq.out.test(merged.data$total.weight)
+chisq.out.test(merged.data$total.dry.weight.g)
 
-ggplot(merged.data, aes(volume, relative.dry.biomass.regrowth)) + geom_point(color = "dodgerblue") + xlab("current shrub volume") + 
-  geom_smooth(method = lm) +
-  ylab("dry biomass regrowth by initial shrub size") +
-  scale_y_continuous(breaks=c(-2,-1,0,1,2))
+```
 
+###Morphometrics
+```{r morphometrics, warning=FALSE, message=FALSE}
+ggplot(merged.data, aes(total.singletons, total.complex.green.shoots)) + geom_point(color = "seagreen3") +
+  geom_smooth(method = lm, color = "seagreen3")
 
-m <- lm(merged.data$relative.dry.biomass.regrowth ~ merged.data$volume)
-summary(m) # slope is not significantly different from 0 so no difference in proportionate regrowth
-anova(m, test = "Chisq")
+ggplot(merged.data, aes(total.singletons, total.woody.shoots)) + geom_point(color = "seagreen3") +
+  geom_smooth(method = lm, color = "seagreen3")
 
-#Morphometrics analyses####
-ggplot(merged.data, aes(total.singletons, total.complex.green.shoots)) + geom_point(color = "dodgerblue") +
-  geom_smooth(method = lm)
-
-  
 ggplot(merged.data, aes(resprout, total.singletons)) + 
-    geom_point(color = "dodgerblue") +
-    geom_smooth(method = lm)
+    geom_point(color = "seagreen3") +
+    geom_smooth(method = lm, color = "seagreen3")
 
-  
+fit <- lm(resprout~total.singletons, data= merged.data)
+summary(fit)
+
 ggplot(merged.data, aes(volume, total.singletons)) + 
-    geom_point(color = "dodgerblue") +
-    geom_smooth(method = lm)
+    geom_point(color = "seagreen3") +
+    geom_smooth(method = lm, color = "seagreen3")
 
-  
 ```
 
 ###Summary
