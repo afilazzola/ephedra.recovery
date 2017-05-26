@@ -221,6 +221,9 @@ ggplot(merged.data, aes(setup.vol, total.weight)) +
 #simple models
 fit <-lm(resprout ~ setup.vol, data = merged.data)
 summary(fit)
+res <- resid(fit)
+plot(merged.data$resprout, res)
+plot(merged.data$volume, res)
 
 m <- glm(resprout ~ setup.vol, data = merged.data)
 summary(m)
