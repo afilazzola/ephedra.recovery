@@ -321,7 +321,9 @@ ggplot(merged.data, aes(total.singletons, total.woody.shoots)) + geom_point(colo
 
 ggplot(merged.data, aes(resprout, total.singletons)) + 
     geom_point(color = "seagreen3") +
-    geom_smooth(method = lm, color = "seagreen3")
+    geom_smooth(method = lm, color = "seagreen3") +
+  xlab("number of shoots resprouted") +
+  ylab("total number of axillary singleton shoots")
 
 fit <- lm(resprout~total.singletons, data= merged.data)
 summary(fit)
