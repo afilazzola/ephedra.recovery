@@ -305,6 +305,7 @@ fit <- lm(total.dry.weight.g ~ total.weight, data= merged.data)
 summary(fit)
 
 library(outliers)
+chisq.out.test(merged.data$resprout)
 chisq.out.test(merged.data$total.weight)
 chisq.out.test(merged.data$total.dry.weight.g)
 
