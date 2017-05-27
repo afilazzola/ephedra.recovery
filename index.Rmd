@@ -219,18 +219,24 @@ ggplot(merged.data, aes(setup.vol, total.weight)) +
   ylab("total biomass (g)")
 
 #simple models
+#shoots
 fit <-lm(resprout ~ setup.vol, data = merged.data)
 summary(fit)
 res <- resid(fit)
 plot(merged.data$resprout, res)
-plot(merged.data$volume, res)
+plot(merged.data$setup.vol, res)
+
 
 m <- glm(resprout ~ setup.vol, data = merged.data)
 summary(m)
 anova(m, test = "Chisq")
 
+#biomass
 fit <-lm(total.weight ~ setup.vol, data = merged.data)
 summary(fit)
+
+plot(fit$residuals~fit$fitted.values)
+
 
 m <- glm(total.weight ~ setup.vol, data = merged.data)
 summary(m)
