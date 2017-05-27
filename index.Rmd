@@ -328,6 +328,8 @@ ggplot(merged.data, aes(resprout, total.singletons)) +
 fit <- lm(resprout~total.singletons, data= merged.data)
 summary(fit)
 
+chisq.out.test(merged.data$total.singletons)
+
 ggplot(merged.data, aes(volume, total.singletons)) + 
     geom_point(color = "seagreen3") +
     geom_smooth(method = lm, color = "seagreen3")
