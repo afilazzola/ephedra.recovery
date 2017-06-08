@@ -132,7 +132,7 @@ m <- lm(richness~volume, data = foundation.rii)
 m
 summary(m)
 #Quantile regression
-m <- rq(abundance~volume, data = foundation.rii)
+m <- rq(richness~volume, data = foundation.rii)
 m
 summary(m, se = "nid")
 
