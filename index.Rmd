@@ -116,13 +116,25 @@ ggplot(foundation.rii, aes(volume, richness)) + geom_point(aes(color=year)) + ge
 ggplot(foundation.rii, aes(volume, richness, color = year)) + geom_point() + geom_smooth(method = "lm", se = FALSE) + xlab("volume (m^3)")
 
 #posthoc tests from main models
+#abundance
 m <- lm(abundance~volume, data = foundation.rii)
 m
 summary(m)
 
+#Quantile regression check
+require(quantreg)
+m <- rq(abundance~volume, data = foundation.rii)
+m
+summary(m, se = "nid")
+
+#richness
 m <- lm(richness~volume, data = foundation.rii)
 m
 summary(m)
+#Quantile regression
+m <- rq(abundance~volume, data = foundation.rii)
+m
+summary(m, se = "nid")
 
 #test 2016 only
 m <- lm(abundance~volume, data = rii.2016)
