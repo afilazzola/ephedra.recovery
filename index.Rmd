@@ -137,13 +137,13 @@ m
 summary(m, se = "nid")
 
 #test 2016 only
-m <- lm(abundance~volume, data = rii.2016)
-m
-summary(m)
+#m <- lm(abundance~volume, data = rii.2016)
+#m
+#summary(m)
 
-m <- lm(richness~volume, data = rii.2016)
-m
-summary(m)
+#m <- lm(richness~volume, data = rii.2016)
+#m
+#summary(m)
 
 #Primary data
 #ggplot(foundation, aes(microsite, abundance)) + geom_boxplot() + facet_grid(~year)
