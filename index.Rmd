@@ -217,6 +217,8 @@ ggplot(nov.2016, aes(total.weight, weight= volume)) +
   xlim(0,5000)
 
 summary(nov.2016)
+std <- function(x) sd(x, na.rm=TRUE)/sqrt(length(x))
+std(nov.2016$total.weight)
 
 ```
 
