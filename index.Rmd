@@ -126,6 +126,9 @@ require(quantreg)
 m <- rq(abundance~volume, data = foundation.rii)
 m
 summary(m, se = "nid")
+rho <- function(u,tau=.5)u*(tau - (u < 0))
+V <- sum(rho(m$resid, m$tau))
+V
 
 #richness
 m <- lm(richness~volume, data = foundation.rii)
@@ -135,6 +138,8 @@ summary(m)
 m <- rq(richness~volume, data = foundation.rii)
 m
 summary(m, se = "nid")
+V <- sum(rho(m$resid, m$tau))
+V
 
 
 #test 2016 only
@@ -240,11 +245,9 @@ plot(fit)
 fit <-rq(resprout ~ setup.vol, data = merged.data)
 summary(fit, se = "nid")
 
-
 res <- resid(fit)
 #plot(merged.data$resprout, res)
 plot(merged.data$setup.vol, abs(res))
-
 
 m <- glm(resprout ~ setup.vol, data = merged.data)
 summary(m)
@@ -258,7 +261,6 @@ plot(fit)
 #quantile
 fit <-rq(total.weight ~ setup.vol, data = merged.data)
 summary(fit, se = "nid")
-
 
 m <- glm(total.weight ~ setup.vol, data = merged.data)
 summary(m)
