@@ -136,6 +136,7 @@ m <- rq(richness~volume, data = foundation.rii)
 m
 summary(m, se = "nid")
 
+
 #test 2016 only
 #m <- lm(abundance~volume, data = rii.2016)
 #m
@@ -236,6 +237,10 @@ fit <-lm(resprout ~ setup.vol, data = merged.data)
 summary(fit)
 plot(fit)
 
+fit <-rq(resprout ~ setup.vol, data = merged.data)
+summary(fit, se = "nid")
+
+
 res <- resid(fit)
 #plot(merged.data$resprout, res)
 plot(merged.data$setup.vol, abs(res))
@@ -249,6 +254,10 @@ anova(m, test = "Chisq")
 fit <-lm(total.weight ~ setup.vol, data = merged.data)
 summary(fit)
 plot(fit)
+
+#quantile
+fit <-rq(total.weight ~ setup.vol, data = merged.data)
+summary(fit, se = "nid")
 
 
 m <- glm(total.weight ~ setup.vol, data = merged.data)
@@ -302,9 +311,11 @@ ggplot(nov.2016, aes(volume, total.weight)) +
   ylab("total biomass (g)") +
   geom_smooth(method = lm, color = "seagreen3")
 
-#quick test
 fit <- lm(total.weight ~ volume, data= nov.2016)
 summary(fit)
+
+fit <- rq(total.weight ~ volume, data= nov.2016)
+summary(fit, se = "nid")
 
 #Wet biomass predictor for dry weights
 ggplot(merged.data, aes(total.weight, total.dry.weight.g)) + 
