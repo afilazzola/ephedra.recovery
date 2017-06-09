@@ -307,6 +307,9 @@ ggplot(nov.2016, aes(resprout, total.weight)) +
 fit <- lm(total.weight ~ resprout, data= nov.2016)
 summary(fit)
 
+fit <- rq(total.weight ~ resprout, data= nov.2016)
+summary(fit, se = "nid")
+
 ggplot(nov.2016, aes(volume, total.weight)) + 
   geom_point(color = "seagreen3") + 
   xlab("shrub volumes (m^3)") +
